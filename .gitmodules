@@ -1,0 +1,3 @@
+[submodule "libant/thirdparty/srt"]
+	path = libant/thirdparty/srt
+	url = https://github.com/Haivision/srt.git
