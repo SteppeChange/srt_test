@@ -12,8 +12,6 @@ XCODE open SRTTest.xcworkspace
 
 # How to reproduce the problem
 
-![alt text](https://i.gyazo.com/67cf8f6027646429831819d277efe657.jpg "assert(rtt < 2.0)")
-
 1. run srt_test on first iPhone at local WiFi network
 1. Start Server
 1. Check logs for local interface: ... [INF] [ANT] libsrt bound to local 192.168.1.50:3011
@@ -22,4 +20,13 @@ XCODE open SRTTest.xcworkspace
 1. Start Client
 1. wait for 20 minutes
 
- 
+![alt text](https://i.gyazo.com/67cf8f6027646429831819d277efe657.jpg "assert(rtt < 2.0)") 
+
+#How it works
+
+First client receives DATA packets and sends ACK reply.
+Second client sends DATA packets with time stamp and receives ACK. Than calculate rtt.   
+Normaly, rtt is about 0.1 second for 100000 bytes packet. Assert indicates that rtt is huge.
+
+
+
