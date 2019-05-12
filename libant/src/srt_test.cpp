@@ -391,7 +391,7 @@ public:
             peer->rbuf.erase(peer->rbuf.begin(),peer->rbuf.end()-remaining);
 
             LOG(ant::Log::EInfo, ant::Log::EAnt,
-                    "command: %s size: %d seq: %d\n",
+                    "recv command: %s size: %d seq: %d\n",
                     in_command.data(), in_data.size(), in_cmd_id);
 
             if(0 == memcmp( in_command.data(), DATA_REQUEST, sizeof(DATA_REQUEST)-1)) {
