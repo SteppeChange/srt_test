@@ -1,4 +1,4 @@
-# compiling
+# Compiling
 
 ```bash
 https://github.com/SteppeChange/srt_test.git
@@ -22,11 +22,9 @@ XCODE open SRTTest.xcworkspace
 
 ![alt text](https://i.gyazo.com/67cf8f6027646429831819d277efe657.jpg "assert(rtt < 2.0)") 
 
-#How it works
+# How it works
 
 First client receives DATA packets and sends ACK reply.
 Second client sends DATA packets with time stamp and receives ACK. Than calculate rtt.   
 Normaly, rtt is about 0.1 second for 100000 bytes packet. Assert indicates that rtt is huge.
-
-
 
