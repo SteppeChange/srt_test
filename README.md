@@ -25,6 +25,7 @@ XCODE open SRTTest.xcworkspace
 # How it works
 
 First client receives DATA packets and sends ACK reply.
-Second client sends DATA packets with time stamp and receives ACK. Than calculate rtt.   
+Second client sends DATA packets with time stamp and receives ACK. Than calculate rtt. 
+It sends 100kb per 200ms https://github.com/SteppeChange/srt_test/blob/master/SRTTest/SRTTestThread.mm#L25
 Normaly, rtt is about 0.1 second for 100000 bytes packet. Assert indicates that rtt is huge.
 
