@@ -1,7 +1,7 @@
 # Compiling
 
 ```bash
-https://github.com/SteppeChange/srt_test.git
+git clone https://github.com/SteppeChange/srt_test.git
 cd srt_test
 git submodule update --init --recursive
 cd libant/thirdparty/srt
