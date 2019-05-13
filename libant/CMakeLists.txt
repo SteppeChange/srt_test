@@ -4,7 +4,7 @@ project(libant)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(CMAKE_BUILD_TYPE "Debug")
-set(ENABLE_DEBUG 0)  # 0 Relaese , 1 Debug, 2 RelWithDebInfo
+set(ENABLE_DEBUG 1)  # 0 Relaese , 1 Debug, 2 RelWithDebInfo
 
 set(SOURCE_FILES
         include/libant/log.h
@@ -49,9 +49,6 @@ target_link_libraries(srt_test PUBLIC m pthread srt_static)
 
 ## add_definitions(-DPACKET_TRACER)
 ## add_definitions(-DANT_UNIT_TESTS)
-## add_definitions(-D_DEBUG_DHT)
-## add_definitions(-D_DEBUG_DHT_VERBOSE)
-## add_definitions(-D_DEBUG_DHT_INSTRUMENT)
 ## add_definitions(-DUSE_HOLEPUNCH) compilation error for this extension
 ## add_definitions(-DTEST_ANNOUNCE) ## send announce to myself
 
