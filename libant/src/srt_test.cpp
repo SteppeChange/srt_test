@@ -331,21 +331,27 @@ public:
         int rc;
         int data_len = data.size();
         rc = ant::bencode_parse_byte_string(p, data_len, &eat_bytes, in_command);
+        if (rc==EAGAIN) {return rc;};
         assert(rc == 0);
         in_command.push_back(0);
         p += eat_bytes;
         data_len -= eat_bytes;
         rc = ant::bencode_parse_integer(p, data_len, &eat_bytes, &in_cmd_id);
+        if (rc==EAGAIN) {return rc;};
         assert(rc == 0);
         p += eat_bytes;
         data_len -= eat_bytes;
         rc = ant::bencode_parse_byte_string(p, data_len, &eat_bytes, in_ntp);
+        if (rc==EAGAIN) {return rc;};
         assert(rc == 0);
         assert(in_ntp.size() == 8);
         p += eat_bytes;
         data_len -= eat_bytes;
         if (data_len) {
             rc = ant::bencode_parse_byte_string(p, data_len, &eat_bytes, in_data);
+            if (rc==EAGAIN) {return rc;};
+            assert(rc == 0);
+
             data_len -= eat_bytes;
         }
 
@@ -376,42 +382,46 @@ public:
             peer->rbuf.insert( peer->rbuf.end(), data.begin(), data.end() );
 
             // Message's structure is <byte string>COMMAND<integer>ID<byte string[8]>NTP_TIMESTAMP<byte string>[DATA]
-            std::vector<uint8_t> in_command;
-            int in_cmd_id;
-            std::vector<uint8_t> in_ntp;
-            std::vector<uint8_t> in_data;
-            int remaining;
-            int res = parse_packet(peer->rbuf, in_command, in_cmd_id, in_ntp, in_data, remaining);
-
-            if(res==EAGAIN)
-            // message is not full
-                return;
-
-            assert(res == 0);
-            peer->rbuf.erase(peer->rbuf.begin(),peer->rbuf.end()-remaining);
-
-            LOG(ant::Log::EInfo, ant::Log::EAnt,
+            while (true) {
+                std::vector<uint8_t> in_command;
+                int in_cmd_id;
+                std::vector<uint8_t> in_ntp;
+                std::vector<uint8_t> in_data;
+                int remaining;
+                int res = parse_packet(peer->rbuf, in_command, in_cmd_id, in_ntp, in_data, remaining);
+                
+                if(res==EAGAIN)
+                    // message is not full
+                    return;
+                
+                assert(res == 0);
+                peer->rbuf.erase(peer->rbuf.begin(),peer->rbuf.end()-remaining);
+                
+                LOG(ant::Log::EInfo, ant::Log::EAnt,
                     "recv command: %s size: %d seq: %d\n",
                     in_command.data(), in_data.size(), in_cmd_id);
-
-            if(0 == memcmp( in_command.data(), DATA_REQUEST, sizeof(DATA_REQUEST)-1)) {
-                assert(in_ntp.size()==8);
-                std::vector<uint8_t>  ack = encode_packet(std::vector<uint8_t>(), DATA_REPLY, in_cmd_id, in_ntp.data());
-                _srt->send(conn_id, std::move(ack));
-            }
-
-            if(0 == memcmp( in_command.data(), DATA_REPLY, sizeof(DATA_REPLY)-1)) {
-                assert(in_ntp.size()==8);
-                struct timeval tv, in_tv;
-                gettimeofday(&tv, 0);
-                ntp2tv(in_ntp.data(), &in_tv);
-                int32_t diff_usec = tv.tv_usec - in_tv.tv_usec;
-                int32_t diff_sec = tv.tv_sec - in_tv.tv_sec;
-                float rtt = (float)(diff_sec * 1e6 + diff_usec) / 1e6;
-                LOG(ant::Log::EInfo, ant::Log::EAnt,
-                    "PACKET TRIP seq: %d rtt: %f sec\n", in_cmd_id, rtt);
-                assert(rtt < 2.0);
-
+                
+                if(0 == memcmp( in_command.data(), DATA_REQUEST, sizeof(DATA_REQUEST)-1)) {
+                    assert(in_ntp.size()==8);
+                    std::vector<uint8_t>  ack = encode_packet(std::vector<uint8_t>(), DATA_REPLY, in_cmd_id, in_ntp.data());
+                    _srt->send(conn_id, std::move(ack));
+                }
+                
+                if(0 == memcmp( in_command.data(), DATA_REPLY, sizeof(DATA_REPLY)-1)) {
+                    assert(in_ntp.size()==8);
+                    struct timeval tv, in_tv;
+                    gettimeofday(&tv, 0);
+                    ntp2tv(in_ntp.data(), &in_tv);
+                    int32_t diff_usec = tv.tv_usec - in_tv.tv_usec;
+                    int32_t diff_sec = tv.tv_sec - in_tv.tv_sec;
+                    float rtt = (float)(diff_sec * 1e6 + diff_usec) / 1e6;
+                    LOG(ant::Log::EInfo, ant::Log::EAnt,
+                        "PACKET TRIP seq: %d rtt: %f sec\n", in_cmd_id, rtt);
+                    assert(rtt < 2.0);
+//                    if (rtt > 2.0) {
+//                        LOG(ant::Log::EInfo, ant::Log::EAnt, "!!!!!!! BIG RTT: %f", rtt);
+//                    }
+                }
             }
         }
     }
