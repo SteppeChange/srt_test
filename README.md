@@ -7,6 +7,7 @@ git submodule update --init --recursive
 cd libant/thirdparty/srt
 ./configure
 cd ../../../
+pod install
 XCODE open SRTTest.xcworkspace
 ```
 
