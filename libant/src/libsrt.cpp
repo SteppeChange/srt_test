@@ -48,7 +48,6 @@ ant::Srt::Srt(Srt_events* events, Network::ptr a_net)
     , _ant_network(a_net)
 {
     // TODO need to change from enable_log_name
-    srt_setloglevel(srt_logging::LogLevel::note);
     srt_setlogflags( 0
                     | SRT_LOGF_DISABLE_TIME
                     | SRT_LOGF_DISABLE_SEVERITY
@@ -59,7 +58,7 @@ ant::Srt::Srt(Srt_events* events, Network::ptr a_net)
     srt_setloghandler(NAME, srt_log_handler);
 
     srt_startup();
-
+    
 #if defined(USE_SRT_RECEIVE_LIMITER)
     _receive_limiter.reset(new Traffic_limiter(1000, RECEIVE_LIMIT_BYTES_PER_SECOND));
     _is_receive_limit_reached = false;

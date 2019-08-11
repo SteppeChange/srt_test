@@ -104,8 +104,7 @@ Pod::Spec.new do |s|
     
     libsrt.private_header_files = "**/*.{h,hpp}"
     
-    libsrt.compiler_flags = "-DSRT_VERSION='\"1.3.3\"'", "-DSRT_ENABLE_ENCRYPTION", "-DUSE_OPENSSL=1", "-DHAICRYPT_DYNAMIC", "-DHAI_ENABLE_SRT=1", "-DHAI_PATCH=1", "-DOSX=1", "-DHAVE_INET_PTON=1", "-D_GNU_SOURCE", "-DENABLE_LOGGING=1", "-Wall -Wextra -g -fPIC"
-    # "-DENABLE_HEAVY_LOGGING=1",
+    libsrt.compiler_flags = "-DSRT_VERSION='\"1.3.3\"'", "-DSRT_ENABLE_ENCRYPTION", "-DUSE_OPENSSL=1", "-DHAICRYPT_DYNAMIC", "-DHAI_ENABLE_SRT=1", "-DHAI_PATCH=1", "-DOSX=1", "-DHAVE_INET_PTON=1", "-D_GNU_SOURCE", "-DENABLE_LOGGING=1", "-Wall -Wextra -g -fPIC", "-DENABLE_HEAVY_LOGGING=1"
     
     libsrt.ios.pod_target_xcconfig = {
       'HEADER_SEARCH_PATHS' => '/usr/local/opt/openssl-ios/include',

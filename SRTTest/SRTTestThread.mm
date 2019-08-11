@@ -21,7 +21,7 @@ static void antLogFunction(char const *text) {
     
     ant_tests::ANTSrtTest *test = new ant_tests::ANTSrtTest(antLogFunction);
 
-    test->o_debug = 2;
+    test->o_debug = 3;
     test->o_bufsize = 100*1024;
     test->o_send_timeout_ms = 200;
     test->o_timeout = 2000;

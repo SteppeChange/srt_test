@@ -417,7 +417,7 @@ public:
                     float rtt = (float)(diff_sec * 1e6 + diff_usec) / 1e6;
                     LOG(ant::Log::EInfo, ant::Log::EAnt,
                         "PACKET TRIP seq: %d rtt: %f sec\n", in_cmd_id, rtt);
-                    assert(rtt < 2.0);
+                    assert(rtt < 4.0);
 //                    if (rtt > 2.0) {
 //                        LOG(ant::Log::EInfo, ant::Log::EAnt, "!!!!!!! BIG RTT: %f", rtt);
 //                    }
@@ -635,7 +635,7 @@ void ant_tests::ANTSrtTest::start() {
             break;
         default:
             ant::Log::enable_log_name(ant::Log::ESrt, ant::Log::EDebug);
-            //srt_setloglevel(srt_logging::LogLevel::debug);
+            srt_setloglevel(srt_logging::LogLevel::debug);
             ant::Log::enable_log_name(ant::Log::EAnt, ant::Log::EDebug);
             break;
     }
